@@ -1,0 +1,35 @@
+{
+  "name": "trade-timing-strategy",
+  "version": "0.1.0",
+  "description": "Trade Timing Strategy for repeated double auction market",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint index.js",
+    "lint-test": "eslint test/index.js",
+    "test": "nyc --reporter=text mocha --timeout 60000 ./test/index.js",
+    "coverage": "nyc --reporter=text-lcov mocha --timeout 60000 | coveralls",
+    "go": "npm run lint && npm run lint-test && npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drpaulbrewer/trade-timing-strategy.git"
+  },
+  "keywords": [
+    "market-experiment",
+    "double-auction",
+    "robot-trading"
+  ],
+  "author": "drpaulbrewer@eaftc.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/drpaulbrewer/trade-timing-strategy/issues"
+  },
+  "homepage": "https://github.com/drpaulbrewer/trade-timing-strategy#readme",
+  "devDependencies": {
+    "coveralls": "^3.1.0",
+    "eslint": "^7.6.0",
+    "mocha": "^8.1.1",
+    "nyc": "^15.1.0",
+    "should": "^13.2.3"
+  }
+}
