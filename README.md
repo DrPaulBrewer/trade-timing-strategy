@@ -4,6 +4,39 @@
 
 A simple trade timing strategy for a repeated double auction market with consistent supply and demand in each period.  Uses backwards induction and stochastic optimization against a collated list of trades.
 
+# Warning
+
+This is in a pre-release state and additional documentation will be provided at a later time.
+
+# Installation
+
+```
+npm i trade-timing-strategy -S
+```
+
+# Initialization
+
+```
+const {TradeTimingStrategy} = require('trade-timing-strategy');
+const tts = new TradeTimingStrategy();
+```
+
+# Usage
+
+```
+// recording periods and single trades
+tts.newPeriod();
+tts.newTrade(150);
+tts.newTrade(225);
+tts.newTrade(200);
+tts.newTrade(175);
+tts.newPeriod();
+// getting a suggested bid
+const myBid = tts.suggestedBid(300,{currentBid:190,currentAsk:250,smooth:0.001});
+// getting a suggested ask
+const myAsk = tts.suggestedAsk(180,{currentBid:100,currentAsk:300,smooth:0.001});
+```
+
 # License: MIT
 
 This software Copyright (c) 2020 Paul Brewer, Economic & Financial Technology Consulting LLC <drpaulbrewer@eaftc.com>
