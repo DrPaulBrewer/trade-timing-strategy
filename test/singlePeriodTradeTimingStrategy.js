@@ -48,8 +48,8 @@ describe('[single period, 4 trades: p=130,110,125,140]', function(){
     assert.ok(tradeAdvisor.tradeNumber===1);
     tradeAdvisor.tradeCollator.length.should.equal(5);
   });
-  it('on first trade of period 2, .suggestedBid(100) should be 100', function(){
-    tradeAdvisor.suggestedBid(100).should.equal(100);
+  it('on first trade of period 2, .suggestedBid(100) should be undefined', function(){
+    assert(tradeAdvisor.suggestedBid(100)===undefined);
   });
   it('on first trade of period 2, .suggestedBid(150) should be 110', function(){
     assert.ok(tradeAdvisor.tradeNumber===1);
@@ -83,9 +83,9 @@ describe('[single period, 4 trades: p=130,110,125,140]', function(){
   it('on first trade of period 2, .suggestedAsk(100) should be 140', function(){
     assert.ok(tradeAdvisor.suggestedAsk(100)===140);
   });
-  it('on first trade of period 2, .suggestedAsk(150) should be 150', function(){
+  it('on first trade of period 2, .suggestedAsk(150) should be undefined', function(){
     assert.ok(tradeAdvisor.tradeNumber===1);
-    tradeAdvisor.suggestedAsk(150).should.equal(150);
+    assert.ok(tradeAdvisor.suggestedAsk(150)===undefined);
   });
   it('on 2nd trade of period 2, .suggestedAsk(100) should be 140', function(){
     tradeAdvisor.newTrade(100);

@@ -171,7 +171,9 @@ class TradeTimingStrategy {
       tradeIndex -= 1;
     }
     const shouldAcceptAsk = (acceptAskProfit && (Math.floor(acceptAskProfit)>=Math.floor(futureTradeExpectedProfit)));
-    return (shouldAcceptAsk)? currentAsk: stage.price;
+    if (shouldAcceptAsk)
+      return currentAsk;
+    return (stage.price>=unitValue)? undefined: stage.price;
   }
 
   suggestedAsk(unitCost, {currentBid,currentAsk,smooth}={}){
@@ -200,7 +202,9 @@ class TradeTimingStrategy {
       tradeIndex -= 1;
     }
     const shouldAcceptBid = (acceptBidProfit && (Math.floor(acceptBidProfit)>=Math.floor(futureTradeExpectedProfit)));
-    return (shouldAcceptBid)? currentBid: stage.price;
+    if (shouldAcceptBid)
+      return currentBid;
+    return (stage.price<=unitCost)? undefined: stage.price;
   }
 
 }
