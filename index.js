@@ -61,6 +61,7 @@ class TradeTimingStrategy {
     this.tradeCollator = [null];
     this.periodNumber = 0;
     this.tradeNumber = 1;
+    this.counters = [0];
   }
 
   newPeriod(){
@@ -74,6 +75,9 @@ class TradeTimingStrategy {
       throw new RangeError("newTrade(p), p must be a non-negative number");
     if (this.periodNumber===0)
       throw new Error("must call newPeriod() before recording trades with newTrade()");
+    if (this.counters[this.tradeNumber]===undefined)
+      this.counters[this.tradeNumber] = 0;
+    this.counters[this.tradeNumber] += 1;
     if (this.tradeCollator[this.tradeNumber]===undefined){
       this.tradeCollator[this.tradeNumber] = new Map();
     }
@@ -88,7 +92,7 @@ class TradeTimingStrategy {
     return this;
   }
 
-  pricesWithProbabilities(n, {above, below, sort, smooth}={}){
+  pricesWithProbabilities(n, {t, above, below, sort, smooth}={}){
     const offset = (n<this.tradeNumber)? 0 : -1;
     const periods = this.periodNumber+offset;
     let data = [...(this.tradeCollator[n] || [])];
@@ -126,7 +130,7 @@ class TradeTimingStrategy {
       if (smooth)
         divisor += smooth*2;
     } else {
-      divisor = periods;
+      divisor = (t)? this.counters[t]: periods;
       if (smooth)
         divisor += smooth*data.length;
     }
@@ -158,7 +162,7 @@ class TradeTimingStrategy {
           above: currentBid,
           below: currentAsk,
           smooth
-      }):({});
+      }):({t:tradeNumber});
       stage = optimize({
         v: unitValue-futureTradeExpectedProfit,
         choices: this.pricesWithProbabilities(tradeIndex, {...options, sort: byPriceAscending})
@@ -166,7 +170,8 @@ class TradeTimingStrategy {
       if (stage.expectedProfit>0) futureTradeExpectedProfit += stage.expectedProfit;
       tradeIndex -= 1;
     }
-    return ((acceptAskProfit>futureTradeExpectedProfit)? currentAsk: stage.price);
+    const shouldAcceptAsk = (acceptAskProfit && (Math.floor(acceptAskProfit)>=Math.floor(futureTradeExpectedProfit)));
+    return (shouldAcceptAsk)? currentAsk: stage.price;
   }
 
   suggestedAsk(unitCost, {currentBid,currentAsk,smooth}={}){
@@ -186,7 +191,7 @@ class TradeTimingStrategy {
           above: currentBid,
           below: currentAsk,
           smooth
-      }):({});
+      }):({t:tradeNumber});
       stage = optimize({
         c: unitCost+futureTradeExpectedProfit,
         choices: this.pricesWithProbabilities(tradeIndex, {...options, sort:byPriceDescending})
@@ -194,7 +199,8 @@ class TradeTimingStrategy {
       if (stage.expectedProfit>0) futureTradeExpectedProfit += stage.expectedProfit;
       tradeIndex -= 1;
     }
-    return ((acceptBidProfit>futureTradeExpectedProfit)? currentBid: stage.price);
+    const shouldAcceptBid = (acceptBidProfit && (Math.floor(acceptBidProfit)>=Math.floor(futureTradeExpectedProfit)));
+    return (shouldAcceptBid)? currentBid: stage.price;
   }
 
 }

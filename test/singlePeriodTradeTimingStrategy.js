@@ -49,7 +49,7 @@ describe('[single period, 4 trades: p=130,110,125,140]', function(){
     tradeAdvisor.tradeCollator.length.should.equal(5);
   });
   it('on first trade of period 2, .suggestedBid(100) should be 100', function(){
-    assert.ok(tradeAdvisor.suggestedBid(100)===100);
+    tradeAdvisor.suggestedBid(100).should.equal(100);
   });
   it('on first trade of period 2, .suggestedBid(150) should be 110', function(){
     assert.ok(tradeAdvisor.tradeNumber===1);
