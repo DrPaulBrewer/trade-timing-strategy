@@ -77,6 +77,12 @@ it('.suggestedAsk() throws RangeError', function(){
 it('.suggestedAsk(100) returns undefined', function(){
   assert.ok(tradeAdvisor.suggestedAsk(100)===undefined);
 });
+it('.suggestedAsk(50,{currentBid:100,currentAsk:200,smooth:0.001}) returns 125', function(){
+  tradeAdvisor.suggestedAsk(50,{currentBid:100,currentAsk:200,smooth:0.001}).should.equal(125);
+});
+it('.suggestedAsk(80,{currentBid:100,currentAsk:119,smooth:0.001}) returns 100', function(){
+  tradeAdvisor.suggestedAsk(80,{currentBid:100,currentAsk:119,smooth:0.001}).should.equal(100);
+});
 it('.pricesWithProbabilities(1) returns []', function(){
   tradeAdvisor.pricesWithProbabilities(1).should.deepEqual([]);
 });
