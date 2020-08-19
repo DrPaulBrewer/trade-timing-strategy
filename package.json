@@ -1,6 +1,6 @@
 {
   "name": "trade-timing-strategy",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Trade Timing Strategy for repeated double auction market",
   "main": "index.js",
   "scripts": {
