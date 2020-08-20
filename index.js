@@ -145,11 +145,14 @@ class TradeTimingStrategy {
     return result;
   }
 
-  suggestedBid(unitValue, {currentBid,currentAsk,smooth}={}){
+  suggestedBid(unitValue, {currentBid,currentAsk,smooth,horizon}={}){
     if ((typeof(unitValue)!=='number') || (unitValue<0))
       throw new RangeError("suggestedBid(unitValue), unitValue must be a non-negative number");
     const acceptAskProfit = (currentAsk && (currentAsk<unitValue))? (unitValue-currentAsk): 0;
     let tradeIndex = this.tradeCollator.length-1;
+    if (horizon >= 0){
+      tradeIndex = Math.min(tradeIndex, this.tradeNumber+horizon);
+    }
     const noDataOK = (currentBid>0) && (currentAsk>0) && (smooth>0);
     const noData = (tradeIndex<1) || (this.tradeCollator[1].size===0);
     if (noData && !noDataOK)
@@ -176,11 +179,14 @@ class TradeTimingStrategy {
     return (stage.price>=unitValue)? undefined: stage.price;
   }
 
-  suggestedAsk(unitCost, {currentBid,currentAsk,smooth}={}){
+  suggestedAsk(unitCost, {currentBid,currentAsk,smooth,horizon}={}){
     if ((typeof(unitCost)!=='number') || (unitCost<0))
       throw new RangeError("suggestedAsk{unitCost}, unitCost must be a non-negative number");
     const acceptBidProfit = (currentBid && (currentBid>unitCost))? (currentBid-unitCost): 0;
     let tradeIndex = this.tradeCollator.length-1;
+    if (horizon >= 0){
+      tradeIndex = Math.min(tradeIndex, this.tradeNumber+horizon);
+    }
     const noDataOK = (currentBid>0) && (currentAsk>0) && (smooth>0);
     const noData = (tradeIndex<1) || (this.tradeCollator[1].size===0);
     if (noData && !noDataOK)
