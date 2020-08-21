@@ -17,6 +17,12 @@ describe('[single period, 4 trades: p=130,110,125,140]', function(){
       .newTrade(140)
       .newPeriod();
   });
+  it('.pricesWithProbabilities(1,{sort:byPriceAscending, below:100, smooth:0.001}) should be []',function(){
+    tradeAdvisor.pricesWithProbabilities(1,{sort:byPriceAscending, below:100, smooth:0.001}).should.deepEqual([]);
+  });
+  it('.pricesWithProbabilities(1,{sort:byPriceAscending, above:200, smooth:0.001}) should be []',function(){
+    tradeAdvisor.pricesWithProbabilities(1,{sort:byPriceAscending, below:100, smooth:0.001}).should.deepEqual([]);
+  });
   it('.pricesWithProbabilities(1,{sort: byPriceAscending}) should be [[130,1]]', function(){
     tradeAdvisor.pricesWithProbabilities(1,{sort:byPriceAscending}).should.deepEqual([[130,1]]);
   });
