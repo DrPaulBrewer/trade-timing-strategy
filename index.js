@@ -96,18 +96,25 @@ class TradeTimingStrategy {
     const offset = (n<this.tradeNumber)? 0 : -1;
     const periods = this.periodNumber+offset;
     let data = [...(this.tradeCollator[n] || [])];
-    let atAbove=0,atBelow=0;
-    // T
+    let atAbove=0,atBelow=0,limitsExist=0;
     if (typeof(above)==='number'){
       atAbove = weight(data,above);
       data = data.filter((d)=>(d[0]>above));
+      limitsExist += 1;
     }
     if (typeof(below)==='number'){
       atBelow = weight(data,below);
       data = data.filter((d)=>(d[0]<below));
+      limitsExist += 1;
     }
+    // if above and below and smooth all exist, we'll generate some uniform data
+    // otherwise we're using existing data and if data is blank we need to return [] now
+    if ((data.length===0) && (limitsExist!==2))
+      return [];
     if (smooth){
-      const first = (isFinite(above))? (above+1): (data[0][0]);
+      // smoothing should occur over a range of integers strictly inside the region
+      // if first is non-integer, round up
+      const first = Math.ceil(isFinite(above)? (above+1): (data[0][0]));
       const last = (isFinite(below))? (below-1): (data[data.length-1][0]);
       const tempMap = new Map(data);
       for(let p=first;p<=last;p++){
